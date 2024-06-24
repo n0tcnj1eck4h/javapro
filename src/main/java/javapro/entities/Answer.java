@@ -1,11 +1,13 @@
 package javapro.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "question_choices")
+@Table(name = "answers")
 public class Answer {
   @Id
+  @JsonIgnore
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   public Long id;
 

@@ -1,5 +1,6 @@
 package javapro.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.util.List;
 
@@ -7,6 +8,7 @@ import java.util.List;
 @Table(name = "questions")
 public class Question {
   @Id
+  @JsonIgnore
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   public Long id;
 
@@ -14,9 +16,10 @@ public class Question {
   public String question;
 
   @ManyToOne
-  @JoinColumn(name = "test_id", nullable = false)
+  @JsonIgnore
+  @JoinColumn(name = "quiz_id", nullable = false)
   public Quiz quiz;
 
-  @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
   public List<Answer> answers;
 }

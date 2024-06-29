@@ -10,7 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/quizzes")
-public class QuizController {
+public class QuizRestController {
 
   @Autowired
   private QuizRepository quizRepository;

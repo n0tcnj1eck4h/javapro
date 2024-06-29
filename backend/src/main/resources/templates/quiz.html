@@ -1,0 +1,26 @@
+<!doctype html>
+<html
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:th="https://www.thymeleaf.org"
+  xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+>
+  <head>
+    <title>Quiz</title>
+  </head>
+  <body>
+    <h1>Quiz: <span th:text="${quiz.title}">Quiz Title</span></h1>
+    <h2>Questions</h2>
+    <ul>
+      <li th:each="question : ${quiz.questions}">
+        <div class="question">
+          <h3 th:text="${question.question}">Question Text</h3>
+          <ul>
+            <li th:each="answer : ${question.answers}">
+              <span th:text="${answer.text}">Answer Text</span>
+            </li>
+          </ul>
+        </div>
+      </li>
+    </ul>
+  </body>
+</html>

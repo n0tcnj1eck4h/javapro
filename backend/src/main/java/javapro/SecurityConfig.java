@@ -21,48 +21,48 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfig {
 
-  @Bean
-  public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-    http
-        .authorizeHttpRequests((requests) -> requests
-            // .requestMatchers("/").permitAll()
-            .requestMatchers("/**").hasRole("ADMIN")
-            .anyRequest().authenticated())
-        .formLogin((form) -> form
-            .loginPage("/login")
-            .permitAll())
-        .logout((logout) -> logout.permitAll());
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        // http
+        // .authorizeHttpRequests((requests) -> requests
+        // // .requestMatchers("/").permitAll()
+        // .requestMatchers("/**").hasRole("ADMIN")
+        // .anyRequest().authenticated())
+        // .formLogin((form) -> form
+        // .loginPage("/login")
+        // .permitAll())
+        // .logout((logout) -> logout.permitAll());
+        //
+        return http.build();
+    }
 
-    return http.build();
-  }
+    @Bean
+    public UserDetailsService userDetailsService() {
+        UserDetails user = User.withDefaultPasswordEncoder()
+                .username("admin")
+                .password("admin")
+                .roles("ADMIN")
+                .build();
 
-  @Bean
-  public UserDetailsService userDetailsService() {
-    UserDetails user = User.withDefaultPasswordEncoder()
-        .username("admin")
-        .password("admin")
-        .roles("ADMIN")
-        .build();
+        return new InMemoryUserDetailsManager(user);
+    }
 
-    return new InMemoryUserDetailsManager(user);
-  }
-
-  // @Autowired
-  // private DataSource dataSource;
-  //
-  // @Autowired
-  // public void configureGlobal(AuthenticationManagerBuilder auth)
-  // throws Exception {
-  // auth.jdbcAuthentication()
-  // .dataSource(dataSource)
-  // .usersByUsernameQuery(query)
-  // .withUser(User.withUsername("user")
-  // .password(passwordEncoder().encode("pass"))
-  // .roles("USER"));
-  // }
-  //
-  // @Bean
-  // public PasswordEncoder passwordEncoder() {
-  // return new BCryptPasswordEncoder();
-  // }
+    // @Autowired
+    // private DataSource dataSource;
+    //
+    // @Autowired
+    // public void configureGlobal(AuthenticationManagerBuilder auth)
+    // throws Exception {
+    // auth.jdbcAuthentication()
+    // .dataSource(dataSource)
+    // .usersByUsernameQuery(query)
+    // .withUser(User.withUsername("user")
+    // .password(passwordEncoder().encode("pass"))
+    // .roles("USER"));
+    // }
+    //
+    // @Bean
+    // public PasswordEncoder passwordEncoder() {
+    // return new BCryptPasswordEncoder();
+    // }
 }

@@ -12,29 +12,34 @@ public class QuestionComponent extends VBox {
   private QuestionCallback callback;
 
   public QuestionComponent(Question question) {
-    this.questionLabel = new Label(question.question);
+    this.questionLabel = new Label(question.getQuestion());
     this.responseLabel = new Label();
     this.submitButton = new Button("Sprawdź");
     this.submitButton.setDisable(false);
-    this.checkBoxes = new CheckBox[question.answers.length];
+    this.checkBoxes = new CheckBox[question.getAnswers().length];
 
-    for (int i = 0; i < question.answers.length; i++) {
-      checkBoxes[i] = new CheckBox(question.answers[i].text);
+    for (int i = 0; i < question.getAnswers().length; i++) {
+      checkBoxes[i] = new CheckBox(question.getAnswers()[i].getText());
       // checkBoxes[i].setOnAction(e -> submitButton.setDisable(false));
     }
 
     this.submitButton.setOnAction(e -> {
       boolean correct = true;
-      for (int i = 0; i < question.answers.length; i++) {
-        if (question.answers[i].correct) {
+      for (int i = 0; i < question.getAnswers().length; i++) {
+        if (question.getAnswers()[i].isCorrect()) {
           checkBoxes[i].setStyle("-fx-text-fill: green;");
         } else {
-          correct = false;
           checkBoxes[i].setStyle("-fx-text-fill: red;");
         }
+
+        if (question.getAnswers()[i].isCorrect() != checkBoxes[i].isSelected()) {
+          correct = false;
+        }
+
+        checkBoxes[i].setDisable(true);
       }
 
-      responseLabel.setText(correct ? "Poprawna odpowiedź😄"
+      responseLabel.setText(correct ? "Poprawna odpowiedź 😄"
           : "Zła odpowiedź 😥");
       submitButton.setDisable(true);
 

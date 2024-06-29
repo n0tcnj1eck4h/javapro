@@ -1,11 +1,25 @@
 package javapro;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Question {
-  public Question(String question, Answer... answers) {
-    this.question = question;
-    this.answers = answers;
+  private String question;
+  private Answer[] answers;
+
+  public String getQuestion() {
+    return question;
   }
 
-  public String question;
-  public Answer[] answers;
+  public void setQuestion(String question) {
+    this.question = question;
+  }
+
+  public Answer[] getAnswers() {
+    return answers;
+  }
+
+  public void setAnswers(Answer[] answers) {
+    this.answers = answers;
+  }
 }

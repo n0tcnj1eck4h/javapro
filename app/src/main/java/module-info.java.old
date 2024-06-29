@@ -1,4 +1,7 @@
 module javapro {
     requires javafx.controls;
+    requires okhttp3;
+    // requires com.fasterxml.jackson;
+
     exports javapro;
 }

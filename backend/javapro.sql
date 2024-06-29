@@ -29,7 +29,7 @@ CREATE TABLE `answers` (
   `question_id` int(11) NOT NULL,
   `correct` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -38,6 +38,47 @@ CREATE TABLE `answers` (
 
 LOCK TABLES `answers` WRITE;
 /*!40000 ALTER TABLE `answers` DISABLE KEYS */;
+INSERT INTO `answers` VALUES
+(3,'Kurczak',1,0),
+(4,'Wieprzowina',1,1),
+(5,'Wołowina',1,0),
+(6,'Baranina',1,0),
+(7,'Dodaje smaku',2,0),
+(8,'Utrwala kolor',2,0),
+(9,'Zagęszcza i żeluje galaretkę',2,1),
+(10,'Zwiększa kaloryczność',2,0),
+(11,'Marchewka i groszek',3,1),
+(12,'Pomidor i ogórek',3,0),
+(13,'Kapusta i burak',3,0),
+(14,'Cebula i papryka',3,0),
+(15,'10-15 minut',4,0),
+(16,'30-45 minut',4,0),
+(17,'1-2 godziny',4,1),
+(18,'3-4 godziny',4,0),
+(19,'Sól, pieprz, liść laurowy',5,1),
+(20,'Sól, curry, bazylia',5,0),
+(21,'Cukier, cynamon, imbir',5,0),
+(22,'Papryka, oregano, tymianek',5,0),
+(23,'5-10°C',6,1),
+(24,'15-20°C',6,0),
+(25,'25-30°C',6,0),
+(26,'35-40°C',6,0),
+(27,'1 dzień',7,0),
+(28,'2-3 dni',7,0),
+(29,'4-5 dni',7,1),
+(30,'6-7 dni',7,0),
+(31,'Owocową',8,0),
+(32,'Warzywną',8,0),
+(33,'Mięsną',8,1),
+(34,'Słodką',8,0),
+(35,'Jest smaczniejsza na zimno',9,1),
+(36,'Jest łatwiejsza do krojenia',9,0),
+(37,'Ma lepszą teksturę',9,0),
+(38,'Wszystkie powyższe',9,1),
+(39,'Cukier',10,0),
+(40,'Sok z cytryny',10,1),
+(41,'Sól',10,0),
+(42,'Pieprz',10,0);
 /*!40000 ALTER TABLE `answers` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -53,7 +94,7 @@ CREATE TABLE `questions` (
   `question` varchar(128) NOT NULL,
   `quiz_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -63,8 +104,16 @@ CREATE TABLE `questions` (
 LOCK TABLES `questions` WRITE;
 /*!40000 ALTER TABLE `questions` DISABLE KEYS */;
 INSERT INTO `questions` VALUES
-(1,'ile to 2+2?',0),
-(2,'ile to 2+2?',13);
+(1,'Co jest głównym składnikiem galaretki garmażeryjnej wieprzowej?',1),
+(2,'Jaką rolę pełni żelatyna w galaretce garmażeryjnej wieprzowej?',1),
+(3,'Jakie warzywa są najczęściej dodawane do galaretki garmażeryjnej wieprzowej?',1),
+(4,'Jak długo należy gotować wieprzowinę na galaretkę, aby była odpowiednio miękka?',1),
+(5,'Jakie przyprawy są zazwyczaj używane do przyprawienia galaretki garmażeryjnej wieprzowej?',1),
+(6,'Jaką temperaturę powinna mieć galaretka garmażeryjna wieprzowa, aby była odpowiednio stężała?',1),
+(7,'Jak długo galaretka garmażeryjna wieprzowa może być przechowywana w lodówce?',1),
+(8,'Jakiego typu galaretkę można uzyskać z mięsa wieprzowego?',1),
+(9,'Dlaczego galaretka garmażeryjna wieprzowa jest często podawana na zimno?',1),
+(10,'Co można dodać do galaretki garmażeryjnej wieprzowej, aby nadać jej kwaskowaty smak?',1);
 /*!40000 ALTER TABLE `questions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -79,7 +128,7 @@ CREATE TABLE `quizzes` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(64) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -89,11 +138,7 @@ CREATE TABLE `quizzes` (
 LOCK TABLES `quizzes` WRITE;
 /*!40000 ALTER TABLE `quizzes` DISABLE KEYS */;
 INSERT INTO `quizzes` VALUES
-(1,'Mój test'),
-(2,'Mój test'),
-(3,'Mój test'),
-(4,'Mój test'),
-(13,'Kolejny test');
+(1,'Test wiedzy o galaretce garmażeryjnej wieprzowej');
 /*!40000 ALTER TABLE `quizzes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -130,4 +175,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*M!100616 SET NOTE_VERBOSITY=@OLD_NOTE_VERBOSITY */;
 
--- Dump completed on 2024-06-25  1:31:21
+-- Dump completed on 2024-06-30  0:31:24

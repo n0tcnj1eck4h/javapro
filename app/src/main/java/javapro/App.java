@@ -1,76 +1,58 @@
 package javapro;
 
+import java.io.IOException;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import okhttp3.*;
 
 public class App extends Application {
-  private int question_idx = 0;
-  private int points = 0;
-  private QuestionComponent[] questions;
-  private Text text;
+  private final OkHttpClient client = new OkHttpClient();
 
   @Override
-  public void start(Stage primaryStage) {
-    StackPane stackPane = new StackPane();
-    VBox vbox = new VBox();
-    HBox hbox = new HBox();
+  public void start(Stage primaryStage) throws IOException {
+    Request request = new Request.Builder()
+        .url("http://127.0.0.1:8080/quiz/1")
+        .build();
 
-    questions = new QuestionComponent[] {
-        new QuestionComponent(new Question(
-            "Java gui?", new Answer("nie", false), new Answer("tak", true))),
-        new QuestionComponent(new Question(
-            "Java backend?", new Answer("swing", false),
-            new Answer("spring", true), new Answer("rocket", false))),
-    };
+    Response response = client.newCall(request).execute();
+    ObjectMapper objectMapper = new ObjectMapper();
 
-    text = new Text();
-    updateBottomText();
+    Quiz quiz = objectMapper.readValue(response.body().string(), Quiz.class);
 
-    for (QuestionComponent questionComponent : questions) {
-      questionComponent.setVisible(false);
-      questionComponent.setCallback(c -> {
-        points += c ? 1 : -1;
-        updateBottomText();
-      });
-    }
+    // Quiz test_quiz = new Quiz();
+    // test_quiz.tite = "Testowy test";
+    // test_quiz.questions = new Question[3];
+    // test_quiz.questions[0] = new Question("Co oznacza PRO w Java PRO?", new
+    // Answer[] {
+    // new Answer("Projekt", false),
+    // new Answer("Professional", false),
+    // new Answer("Prokop", false),
+    // new Answer("Bóg wie", true),
+    // });
+    //
+    // test_quiz.questions[1] = new Question("Ile to jest sqrt(4)", new Answer[] {
+    // new Answer("2", true),
+    // new Answer("1", false),
+    // new Answer("-2", true),
+    // });
+    //
+    // test_quiz.questions[2] = new Question("Co jest głównym składnikiem galaretki
+    // garmażeryjnej wieprzowej?",
+    // new Answer[] {
+    // new Answer("Kurczak", false),
+    // new Answer("Wiperzowina", true),
+    // new Answer("Wołowina", false),
+    // new Answer("Baranina", false),
+    // });
 
-    questions[0].setVisible(true);
-
-    Button nextButton = new Button("Następne pytanie");
-    nextButton.setOnAction(e -> {
-      questions[question_idx].setVisible(false);
-      question_idx = (question_idx + 1) % questions.length;
-      questions[question_idx].setVisible(true);
-      updateBottomText();
-    });
-
-    Button previousButton = new Button("Poprzednie pytanie");
-    previousButton.setOnAction(e -> {
-      questions[question_idx].setVisible(false);
-      question_idx = (questions.length + question_idx - 1) % questions.length;
-      questions[question_idx].setVisible(true);
-      updateBottomText();
-    });
-
-    stackPane.getChildren().addAll(questions);
-    hbox.getChildren().addAll(previousButton, text, nextButton);
-    vbox.getChildren().addAll(stackPane, hbox);
-
-    Scene scene = new Scene(vbox, 300, 300);
+    Scene scene = new Scene(new QuizComponent(quiz), 300, 300);
     primaryStage.setTitle("JavaFXQuiz");
     primaryStage.setScene(scene);
     primaryStage.show();
-  }
-
-  private void updateBottomText() {
-    text.setText(String.format("Pytanie %d/%d\nPunkty: %d", question_idx + 1,
-        questions.length, points));
   }
 
   public static void main(String[] args) {

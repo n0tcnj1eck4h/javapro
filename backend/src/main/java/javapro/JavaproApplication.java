@@ -36,19 +36,19 @@ public class JavaproApplication {
 		return "panel";
 	}
 
-	@Autowired
-	private QuizRepository quizRepository;
+	// @Autowired
+	// private QuizRepository quizRepository;
 
-	@GetMapping("/quiz/{id}")
-	public String panel(@PathVariable long id, Model model) {
-		Optional<Quiz> quizOptional = quizRepository.findById(id);
-
-		if (quizOptional.isPresent()) {
-			Quiz quiz = quizOptional.get();
-			model.addAttribute("quiz", quiz);
-			return "quiz";
-		} else {
-			return "redirect:/";
-		}
-	}
+	// @GetMapping("/quiz/{id}")
+	// public String panel(@PathVariable long id, Model model) {
+	// Optional<Quiz> quizOptional = quizRepository.findById(id);
+	//
+	// if (quizOptional.isPresent()) {
+	// Quiz quiz = quizOptional.get();
+	// model.addAttribute("quiz", quiz);
+	// return "quiz";
+	// } else {
+	// return "redirect:/";
+	// }
+	// }
 }

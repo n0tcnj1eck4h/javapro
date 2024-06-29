@@ -18,6 +18,7 @@ public class Answer {
   public boolean correct;
 
   @ManyToOne
+  @JsonIgnore
   @JoinColumn(name = "question_id")
   public Question question;
 }

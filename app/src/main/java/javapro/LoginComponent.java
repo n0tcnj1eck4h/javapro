@@ -5,6 +5,7 @@ import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import okhttp3.FormBody;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -52,11 +53,14 @@ public class LoginComponent extends GridPane {
   }
 
   private boolean login(String username, String password) throws IOException {
-    String jsonBody = String.format("{\"username\": \"%s\", \"password\": \"%s\"}", username, password);
-    RequestBody body = RequestBody.create(jsonBody, MediaType.parse("application/json"));
+    RequestBody formBody = new FormBody.Builder()
+        .add("username", username)
+        .add("password", password)
+        .build();
+
     Request request = new Request.Builder()
-        .url("http://127.0.0.1/login")
-        .post(body)
+        .url("http://127.0.0.1:8080/login")
+        .post(formBody)
         .build();
 
     try (Response response = client.newCall(request).execute()) {

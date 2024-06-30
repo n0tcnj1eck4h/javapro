@@ -4,6 +4,10 @@ import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 
+interface QuestionCallback {
+  void onAnswerSubmitted(boolean isCorrect);
+}
+
 public class QuestionComponent extends VBox {
   private Label questionLabel;
   private Label responseLabel;

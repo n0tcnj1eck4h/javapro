@@ -49,7 +49,7 @@ public class App extends Application {
     // new Answer("Baranina", false),
     // });
 
-    Scene scene = new Scene(new QuizComponent(quiz), 300, 300);
+    Scene scene = new Scene(new QuizPickerComponent(new String[] { "nugger", "uh" }), 300, 300);
     primaryStage.setTitle("JavaFXQuiz");
     primaryStage.setScene(scene);
     primaryStage.show();

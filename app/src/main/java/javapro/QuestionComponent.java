@@ -1,8 +1,17 @@
 package javapro;
 
+import java.io.IOException;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import javafx.geometry.Insets;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 interface QuestionCallback {
   void onAnswerSubmitted(boolean isCorrect);
@@ -15,7 +24,7 @@ public class QuestionComponent extends VBox {
   private CheckBox[] checkBoxes;
   private QuestionCallback callback;
 
-  public QuestionComponent(Question question) {
+  public QuestionComponent(Question question, OkHttpClient client) {
     this.questionLabel = new Label(question.getQuestion());
     this.responseLabel = new Label();
     this.submitButton = new Button("Sprawdź");
@@ -28,27 +37,37 @@ public class QuestionComponent extends VBox {
     }
 
     this.submitButton.setOnAction(e -> {
-      boolean correct = true;
-      for (int i = 0; i < question.getAnswers().length; i++) {
-        if (question.getAnswers()[i].isCorrect()) {
-          checkBoxes[i].setStyle("-fx-text-fill: green;");
-        } else {
-          checkBoxes[i].setStyle("-fx-text-fill: red;");
+      Request request = new Request.Builder()
+          .url("http://127.0.0.1:8080/quiz/answers/" + question.getId())
+          .build();
+      try {
+        Response response = client.newCall(request).execute();
+        boolean[] answers = new ObjectMapper().readValue(response.body().string(), boolean[].class);
+        boolean correct = true;
+        for (int i = 0; i < question.getAnswers().length; i++) {
+          if (answers[i]) {
+            checkBoxes[i].setStyle("-fx-text-fill: green;");
+          } else {
+            checkBoxes[i].setStyle("-fx-text-fill: red;");
+          }
+
+          if (answers[i] != checkBoxes[i].isSelected()) {
+            correct = false;
+          }
+
+          checkBoxes[i].setDisable(true);
         }
 
-        if (question.getAnswers()[i].isCorrect() != checkBoxes[i].isSelected()) {
-          correct = false;
+        responseLabel.setText(correct ? "Poprawna odpowiedź 😄"
+            : "Zła odpowiedź 😥");
+        submitButton.setDisable(true);
+
+        if (callback != null) {
+          callback.onAnswerSubmitted(correct);
         }
-
-        checkBoxes[i].setDisable(true);
-      }
-
-      responseLabel.setText(correct ? "Poprawna odpowiedź 😄"
-          : "Zła odpowiedź 😥");
-      submitButton.setDisable(true);
-
-      if (callback != null) {
-        callback.onAnswerSubmitted(correct);
+      } catch (IOException ex) {
+        ex.printStackTrace();
+        System.err.println(ex.getMessage());
       }
     });
 

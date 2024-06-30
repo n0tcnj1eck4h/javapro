@@ -64,7 +64,7 @@ public class App extends Application {
     try {
       Response response = client.newCall(request).execute();
       Quiz quiz = new ObjectMapper().readValue(response.body().string(), Quiz.class);
-      QuizComponent quizComponent = new QuizComponent(quiz);
+      QuizComponent quizComponent = new QuizComponent(quiz, client);
       quizComponent.setCallback((s, m) -> {
         RankingPanelComponent panel = new RankingPanelComponent(quiz.getTitle(), s, m);
         panel.getButton().setOnAction(e -> {

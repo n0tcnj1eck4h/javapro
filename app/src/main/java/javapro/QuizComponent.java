@@ -5,6 +5,7 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
+import okhttp3.OkHttpClient;
 
 interface QuizFinishedCallback {
   void onQuizFinished(int score, int max_score);
@@ -23,7 +24,7 @@ public class QuizComponent extends VBox {
     this.callback = c;
   }
 
-  public QuizComponent(Quiz quiz) {
+  public QuizComponent(Quiz quiz, OkHttpClient client) {
     StackPane stackPane = new StackPane();
     HBox hbox = new HBox();
     finishButton = new Button("Zakończ test");
@@ -37,7 +38,7 @@ public class QuizComponent extends VBox {
 
     questionComponents = new QuestionComponent[quiz.getQuestions().length];
     for (int i = 0; i < quiz.getQuestions().length; i++) {
-      questionComponents[i] = new QuestionComponent(quiz.getQuestions()[i]);
+      questionComponents[i] = new QuestionComponent(quiz.getQuestions()[i], client);
       questionComponents[i].setVisible(false);
       questionComponents[i].setCallback(c -> {
         points += c ? 1 : 0;

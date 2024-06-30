@@ -12,20 +12,28 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+interface LoginCallback {
+  void onLogin(boolean success);
+}
+
 public class LoginComponent extends GridPane {
-  OkHttpClient client;
+  private OkHttpClient client;
+  private LoginCallback callback;
+
+  public void setCallback(LoginCallback callback) {
+    this.callback = callback;
+  }
 
   public LoginComponent(OkHttpClient client) {
     this.client = client;
 
-    Label usernameLabel = new Label("Username:");
+    Label usernameLabel = new Label("Login:");
     TextField usernameField = new TextField();
-    Label passwordLabel = new Label("Password:");
+    Label passwordLabel = new Label("Hasło:");
     PasswordField passwordField = new PasswordField();
-    Button loginButton = new Button("Login");
+    Button loginButton = new Button("Zaloguj się");
     Label statusLabel = new Label();
 
-    this.setPadding(new Insets(20));
     this.setVgap(10);
     this.setHgap(10);
 
@@ -39,39 +47,33 @@ public class LoginComponent extends GridPane {
     loginButton.setOnAction(e -> {
       String username = usernameField.getText();
       String password = passwordField.getText();
-      try {
-        boolean loggedIn = login(username, password);
-        if (loggedIn) {
-          statusLabel.setText("Login successful.");
-        } else {
-          statusLabel.setText("Login failed. Please check your credentials.");
-        }
-      } catch (IOException ex) {
-        statusLabel.setText("Error during login: " + ex.getMessage());
+      boolean loggedIn = login(username, password);
+      if (this.callback != null) {
+        this.callback.onLogin(loggedIn);
+      }
+      if (!loggedIn) {
+        statusLabel.setText("Niepoprawny login lub hasło");
       }
     });
   }
 
-  private boolean login(String username, String password) throws IOException {
-    RequestBody formBody = new FormBody.Builder()
-        .add("username", username)
-        .add("password", password)
-        .build();
-
-    Request request = new Request.Builder()
-        .url("http://127.0.0.1:8080/login")
-        .post(formBody)
-        .build();
-
-    try (Response response = client.newCall(request).execute()) {
-      if (!response.isSuccessful()) {
-        throw new IOException("Unexpected HTTP code: " + response.code());
-      }
-
-      String responseBody = response.body().string();
-      System.out.println("Response Body: " + responseBody);
-
-      return responseBody.contains("login successful");
-    }
+  private boolean login(String username, String password) {
+    // RequestBody formBody = new FormBody.Builder()
+    // .add("username", username)
+    // .add("password", password)
+    // .build();
+    //
+    // String url = "http://127.0.0.1:8080/login";
+    //
+    // Request request = new Request.Builder()
+    // .url(url)
+    // .post(formBody)
+    // .build();
+    //
+    // Response response = client.newCall(request).execute();
+    // System.out.println("Cookies: " + ((SimpleCookieJar)
+    // client.cookieJar()).getCookieStore());
+    // return ((SimpleCookieJar) client.cookieJar()).getCookieStore().size() > 0;
+    return true;
   }
 }

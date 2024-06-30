@@ -6,15 +6,33 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 
+interface QuizFinishedCallback {
+  void onQuizFinished(int score, int max_score);
+}
+
 public class QuizComponent extends VBox {
-  private int question_idx = 0;
+  private int questionIndex = 0;
   private int points = 0;
+  private int completedQuestions = 0;
   private QuestionComponent[] questionComponents;
   private Text text;
+  private Button finishButton;
+  private QuizFinishedCallback callback;
+
+  public void setCallback(QuizFinishedCallback c) {
+    this.callback = c;
+  }
 
   public QuizComponent(Quiz quiz) {
     StackPane stackPane = new StackPane();
     HBox hbox = new HBox();
+    finishButton = new Button("Zakończ test");
+    finishButton.setVisible(false);
+    finishButton.setOnAction(e -> {
+      if (this.callback != null) {
+        this.callback.onQuizFinished(points, questionComponents.length);
+      }
+    });
     text = new Text();
 
     questionComponents = new QuestionComponent[quiz.getQuestions().length];
@@ -23,7 +41,11 @@ public class QuizComponent extends VBox {
       questionComponents[i].setVisible(false);
       questionComponents[i].setCallback(c -> {
         points += c ? 1 : 0;
+        completedQuestions++;
         updateBottomText();
+        if (completedQuestions == questionComponents.length) {
+          finishButton.setVisible(true);
+        }
       });
     }
 
@@ -33,27 +55,27 @@ public class QuizComponent extends VBox {
 
     Button previousButton = new Button("←");
     previousButton.setOnAction(e -> {
-      questionComponents[question_idx].setVisible(false);
-      question_idx = Math.max(question_idx - 1, 0);
-      questionComponents[question_idx].setVisible(true);
+      questionComponents[questionIndex].setVisible(false);
+      questionIndex = Math.max(questionIndex - 1, 0);
+      questionComponents[questionIndex].setVisible(true);
       updateBottomText();
     });
 
     Button nextButton = new Button("→");
     nextButton.setOnAction(e -> {
-      questionComponents[question_idx].setVisible(false);
-      question_idx = Math.min(question_idx + 1, questionComponents.length - 1);
-      questionComponents[question_idx].setVisible(true);
+      questionComponents[questionIndex].setVisible(false);
+      questionIndex = Math.min(questionIndex + 1, questionComponents.length - 1);
+      questionComponents[questionIndex].setVisible(true);
       updateBottomText();
     });
 
     stackPane.getChildren().addAll(questionComponents);
     hbox.getChildren().addAll(previousButton, text, nextButton);
-    this.getChildren().addAll(stackPane, hbox);
+    this.getChildren().addAll(stackPane, hbox, finishButton);
   }
 
   private void updateBottomText() {
-    text.setText(String.format("Pytanie %d/%d\nPunkty: %d", question_idx + 1,
+    text.setText(String.format("Pytanie %d/%d\nPunkty: %d", questionIndex + 1,
         questionComponents.length, points));
   }
 }

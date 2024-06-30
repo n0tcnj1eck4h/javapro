@@ -3,17 +3,8 @@ package javapro;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Quiz {
-  private String tite;
+public class Quiz extends PartialQuiz {
   private Question[] questions;
-
-  public String getTite() {
-    return tite;
-  }
-
-  public void setTite(String tite) {
-    this.tite = tite;
-  }
 
   public Question[] getQuestions() {
     return questions;

@@ -7,52 +7,79 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.scene.layout.StackPane;
+import javafx.geometry.Insets;
 import okhttp3.*;
 
 public class App extends Application {
-  private final OkHttpClient client = new OkHttpClient();
+  private OkHttpClient client;
+  private StackPane stackPane;
+  private LoginComponent login;
+  private QuizPickerComponent quizPicker;
 
   @Override
   public void start(Stage primaryStage) throws IOException {
-    Request request = new Request.Builder()
-        .url("http://127.0.0.1:8080/quiz/1")
-        .build();
+    client = new OkHttpClient().newBuilder().cookieJar(new SimpleCookieJar()).build();
+    stackPane = new StackPane();
 
-    Response response = client.newCall(request).execute();
-    ObjectMapper objectMapper = new ObjectMapper();
+    stackPane.setPadding(new Insets(20));
 
-    Quiz quiz = objectMapper.readValue(response.body().string(), Quiz.class);
+    login = new LoginComponent(client);
+    login.setCallback(s -> {
+      if (s) {
+        stackPane.getChildren().remove(login);
+        showPicker();
+      }
+    });
 
-    // Quiz test_quiz = new Quiz();
-    // test_quiz.tite = "Testowy test";
-    // test_quiz.questions = new Question[3];
-    // test_quiz.questions[0] = new Question("Co oznacza PRO w Java PRO?", new
-    // Answer[] {
-    // new Answer("Projekt", false),
-    // new Answer("Professional", false),
-    // new Answer("Prokop", false),
-    // new Answer("Bóg wie", true),
-    // });
-    //
-    // test_quiz.questions[1] = new Question("Ile to jest sqrt(4)", new Answer[] {
-    // new Answer("2", true),
-    // new Answer("1", false),
-    // new Answer("-2", true),
-    // });
-    //
-    // test_quiz.questions[2] = new Question("Co jest głównym składnikiem galaretki
-    // garmażeryjnej wieprzowej?",
-    // new Answer[] {
-    // new Answer("Kurczak", false),
-    // new Answer("Wiperzowina", true),
-    // new Answer("Wołowina", false),
-    // new Answer("Baranina", false),
-    // });
-
-    Scene scene = new Scene(new QuizPickerComponent(new String[] { "nugger", "uh" }), 300, 300);
+    stackPane.getChildren().add(login);
+    Scene scene = new Scene(stackPane, 500, 300);
     primaryStage.setTitle("JavaFXQuiz");
     primaryStage.setScene(scene);
     primaryStage.show();
+  }
+
+  private void showPicker() {
+    Request request = new Request.Builder()
+        .url("http://127.0.0.1:8080/quiz")
+        .build();
+    try {
+      Response response = client.newCall(request).execute();
+      Quiz[] quizzes = new ObjectMapper().readValue(response.body().string(), Quiz[].class);
+      quizPicker = new QuizPickerComponent(quizzes);
+      quizPicker.setCallback(q -> {
+        onQuizpicked(q);
+      });
+      stackPane.getChildren().add(quizPicker);
+    } catch (IOException e) {
+      e.printStackTrace();
+      System.err.println(e.getMessage());
+    }
+  }
+
+  private void onQuizpicked(PartialQuiz partialQuiz) {
+    Request request = new Request.Builder()
+        .url("http://127.0.0.1:8080/quiz/" + partialQuiz.id)
+        .build();
+    try {
+      Response response = client.newCall(request).execute();
+      Quiz quiz = new ObjectMapper().readValue(response.body().string(), Quiz.class);
+      QuizComponent quizComponent = new QuizComponent(quiz);
+      quizComponent.setCallback((s, m) -> {
+        RankingPanelComponent panel = new RankingPanelComponent(quiz.getTitle(), s, m);
+        panel.getButton().setOnAction(e -> {
+          stackPane.getChildren().remove(panel);
+          showPicker();
+        });
+        stackPane.getChildren().remove(quizComponent);
+        stackPane.getChildren().add(panel);
+      });
+      stackPane.getChildren().remove(quizPicker);
+      stackPane.getChildren().add(quizComponent);
+    } catch (IOException e) {
+      e.printStackTrace();
+      System.err.println(e.getMessage());
+    }
   }
 
   public static void main(String[] args) {

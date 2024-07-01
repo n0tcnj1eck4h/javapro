@@ -2,7 +2,10 @@ package javapro.controllers;
 
 import java.util.List;
 import java.util.Optional;
-
+import javapro.entities.Answer;
+import javapro.entities.Question;
+import javapro.entities.Quiz;
+import javapro.repositories.QuizRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,11 +13,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-
-import javapro.entities.Answer;
-import javapro.entities.Question;
-import javapro.entities.Quiz;
-import javapro.repositories.QuizRepository;
 
 @Controller
 public class PanelController {
@@ -54,10 +52,6 @@ public class PanelController {
 
   @PostMapping("/")
   public String postQuiz(@ModelAttribute Quiz quiz) {
-    Question q = new Question();
-    q.setQuiz(quiz);
-    q.setQuestion("Treść pytania");
-    quiz.getQuestions().add(q);
     quizRepository.save(quiz);
     return "redirect:/";
   }

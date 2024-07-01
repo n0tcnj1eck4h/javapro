@@ -29,7 +29,7 @@ CREATE TABLE `answers` (
   `question_id` int(11) NOT NULL,
   `correct` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=83 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -78,7 +78,47 @@ INSERT INTO `answers` VALUES
 (39,'Cukier',10,0),
 (40,'Sok z cytryny',10,1),
 (41,'Sól',10,0),
-(42,'Pieprz',10,0);
+(42,'Pieprz',10,0),
+(43,'Open Graphics Library',11,1),
+(44,'Open Game Library',11,0),
+(45,'Open General Library',11,0),
+(46,'Open Geometric Library',11,0),
+(47,'OpenGL 1.0',12,0),
+(48,'OpenGL 2.0',12,1),
+(49,'OpenGL 3.0',12,0),
+(50,'OpenGL 4.0',12,0),
+(51,'Virtual Buffer Object',13,0),
+(52,'Visual Buffer Object',13,0),
+(53,'Vertex Buffer Object',13,1),
+(54,'Volume Buffer Object',13,0),
+(55,'Vertex Shader, Fragment Shader, Geometry Shader',14,1),
+(56,'Pixel Shader, Sound Shader, Texture Shader',14,0),
+(57,'Geometry Shader, Pixel Shader, Texture Shader',14,0),
+(58,'Fragment Shader, Sound Shader, Geometry Shader',14,0),
+(59,'glCreateShader, glCompileShader, glAttachShader, glLinkProgram',15,1),
+(60,'glShaderCompile, glShaderLink, glCreateProgram',15,0),
+(61,'glShaderCreate, glShaderAttach, glProgramLink',15,0),
+(62,'glShaderInit, glShaderConnect, glProgramCreate',15,0),
+(63,'Włącza test głębokości',16,1),
+(64,'Włącza test tekstur',16,0),
+(65,'Wyłącza test głębokości',16,0),
+(66,'Wyłącza test tekstur',16,0),
+(67,'Depth Buffer',17,0),
+(68,'Color Buffer',17,1),
+(69,'Stencil Buffer',17,0),
+(70,'Frame Buffer',17,0),
+(71,'glBegin, glEnd',18,0),
+(72,'glDrawArrays, glDrawElements',18,1),
+(73,'glStart, glStop',18,0),
+(74,'glRenderBegin, glRenderEnd',18,0),
+(75,'Generuje nowe bufor tekstur',19,0),
+(76,'Generuje nowe identyfikatory buforów',19,1),
+(77,'Generuje nowe shadery',19,0),
+(78,'Generuje nowe programy',19,0),
+(79,'GL_TRIANGLES, GL_QUADS, GL_POLYGON',20,1),
+(80,'GL_LINES, GL_POINTS, GL_SQUARES',20,0),
+(81,'GL_RECTANGLES, GL_POLYGONS, GL_CIRCLES',20,0),
+(82,'GL_POINTS, GL_TRIANGLES, GL_CIRCLES',20,0);
 /*!40000 ALTER TABLE `answers` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -94,7 +134,7 @@ CREATE TABLE `questions` (
   `question` varchar(128) NOT NULL,
   `quiz_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -113,7 +153,17 @@ INSERT INTO `questions` VALUES
 (7,'Jak długo galaretka garmażeryjna wieprzowa może być przechowywana w lodówce?',1),
 (8,'Jakiego typu galaretkę można uzyskać z mięsa wieprzowego?',1),
 (9,'Dlaczego galaretka garmażeryjna wieprzowa jest często podawana na zimno?',1),
-(10,'Co można dodać do galaretki garmażeryjnej wieprzowej, aby nadać jej kwaskowaty smak?',1);
+(10,'Co można dodać do galaretki garmażeryjnej wieprzowej, aby nadać jej kwaskowaty smak?',1),
+(11,'Co oznacza skrót OpenGL?',2),
+(12,'Która wersja OpenGL wprowadziła Shader Language (GLSL)?',2),
+(13,'Co to jest VBO w kontekście OpenGL?',2),
+(14,'Jakie typy shaderów są dostępne w OpenGL?',2),
+(15,'Jakie funkcje są używane do tworzenia i łączenia shaderów w OpenGL?',2),
+(16,'Co robi funkcja glEnable(GL_DEPTH_TEST) w OpenGL?',2),
+(17,'Który bufor przechowuje informacje o kolorach pikseli na ekranie w OpenGL?',2),
+(18,'Jakie funkcje są używane do rysowania prymitywów w OpenGL?',2),
+(19,'Co robi funkcja glGenBuffers w OpenGL?',2),
+(20,'Jakie są podstawowe typy prymitywów w OpenGL?',2);
 /*!40000 ALTER TABLE `questions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -128,7 +178,7 @@ CREATE TABLE `quizzes` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(64) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -138,7 +188,8 @@ CREATE TABLE `quizzes` (
 LOCK TABLES `quizzes` WRITE;
 /*!40000 ALTER TABLE `quizzes` DISABLE KEYS */;
 INSERT INTO `quizzes` VALUES
-(1,'Test wiedzy o galaretce garmażeryjnej wieprzowej');
+(1,'Test wiedzy o galaretce garmażeryjnej wieprzowej'),
+(2,'Quiz na temat OpenGL');
 /*!40000 ALTER TABLE `quizzes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -175,4 +226,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*M!100616 SET NOTE_VERBOSITY=@OLD_NOTE_VERBOSITY */;
 
--- Dump completed on 2024-06-30  0:31:24
+-- Dump completed on 2024-07-01  0:18:33

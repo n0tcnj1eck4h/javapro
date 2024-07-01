@@ -7,8 +7,8 @@ public class ClientQuizDTO {
   private Long id;
 
   public ClientQuizDTO(Quiz quiz) {
-    this.title = quiz.title;
-    this.id = quiz.id;
+    this.title = quiz.getTitle();
+    this.id = quiz.getId();
   }
 
   public String getTitle() {

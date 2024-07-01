@@ -1,0 +1,88 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title>Edytowanie testu</title>
+    <script>
+      function addAnswer(e) {
+        var items = e.parentNode.querySelectorAll("li");
+        var lastchild = items[items.length - 1];
+        var new_element = lastchild.cloneNode(true);
+        var q = e.parentNode.parentNode.dataset.question;
+        var a = ++new_element.dataset.answer;
+        new_element.children[0].setAttribute(
+          "name",
+          `questions[${q}].answers[${a}].text`,
+        );
+        new_element.children[1].setAttribute(
+          "name",
+          `questions[${q}].answers[${a}].correct`,
+        );
+        new_element.children[0].id = `questions${q}.answers${a}.text`;
+        new_element.children[1].id = `questions${q}.answers${a}.correct`;
+        lastchild.after(new_element);
+      }
+
+      function addQuestion(e) {
+        var items = e.parentNode.querySelectorAll("div");
+        var lastchild = items[items.length - 1];
+        var new_element = lastchild.cloneNode(true);
+        var q = ++new_element.dataset.question;
+        new_element.children[1].setAttribute(
+          "name",
+          `questions[${q}].question`,
+        );
+        new_element.children[1].id = `questions${q}.question`;
+        new_element.children[2].querySelectorAll("li").forEach((v) => {
+          v.children[0].id = `questions${q}.answers${v.dataset.answer}.text`;
+          v.children[1].id = `questions${q}.answers${v.dataset.answer}.correct`;
+          v.children[0].setAttribute(
+            "name",
+            `questions[${q}].answers[${v.dataset.answer}].text`,
+          );
+          v.children[1].setAttribute(
+            "name",
+            `questions[${q}].answers[${v.dataset.answer}].correct`,
+          );
+        });
+        lastchild.after(new_element);
+      }
+    </script>
+  </head>
+  <body>
+    <h1>Edytowanie testu</h1>
+    <form th:object="${quiz}" method="post" action="/edit">
+      <input type="hidden" th:field="*{id}" />
+      <label for="title">Tytuł:</label>
+      <input type="text" id="title" th:field="*{title}" />
+      <div
+        th:each="question, iterStat : ${quiz.questions}"
+        th:attr="data-question=${iterStat.index}"
+      >
+        <label>Pytanie: </label>
+        <input
+          type="text"
+          th:field="*{questions[__${iterStat.index}__].question}"
+        />
+        <ol>
+          <li
+            th:attr="data-answer=${iterStat2.index}"
+            th:each="answer, iterStat2 : ${question.answers}"
+          >
+            <input
+              type="text"
+              th:field="*{questions[__${iterStat.index}__].answers[__${iterStat2.index}__].text}"
+            />
+            <input
+              type="checkbox"
+              th:field="*{questions[__${iterStat.index}__].answers[__${iterStat2.index}__].correct}"
+            />
+          </li>
+          <button type="button" onClick="addAnswer(this)">+</button>
+        </ol>
+      </div>
+      <button type="button" onClick="addQuestion(this)">Dodaj pytanie</button>
+      <button type="submit">Zapisz zmiany</button>
+    </form>
+    <a href="/">Wróć</a>
+  </body>
+</html>

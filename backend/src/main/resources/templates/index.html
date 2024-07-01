@@ -1,21 +1,21 @@
 <!doctype html>
-<html
-  xmlns="http://www.w3.org/1999/xhtml"
-  xmlns:th="https://www.thymeleaf.org"
-  xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
->
+<html xmlns:th="http://www.thymeleaf.org">
   <head>
-    <title>Hello World!</title>
+    <title>Panel testów</title>
   </head>
   <body>
-    <h1 th:inline="text">
-      Hello <span th:remove="tag" sec:authentication="name">thymeleaf</span>!
-    </h1>
-    <div sec:authorize="hasRole('ROLE_ADMIN')">
-      <a href="/panel">Panel administratora</a>
-    </div>
-    <form th:action="@{/logout}" method="post">
-      <input type="submit" value="Sign Out" />
+    <h1>Panel testów</h1>
+    <ul>
+      <li th:each="quiz : ${quizzes}">
+        <a th:text="${quiz.title}" th:href="@{/edit/{id}(id=${quiz.id})}"
+          >Nazwa testu</a
+        >
+      </li>
+    </ul>
+    <form th:object="${quiz}" method="post">
+      <label for="title">Tytuł testu:</label>
+      <input type="text" name="title" />
+      <button type="submit">Dodaj nowy test</button>
     </form>
   </body>
 </html>
